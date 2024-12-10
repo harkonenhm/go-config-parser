@@ -3,11 +3,22 @@ package config
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
 )
+
+func ParseConfigFromExeFolder(configStruct interface{}, configFile string) error {
+	executable, err := os.Executable()
+	if err != nil {
+		return err
+	}
+
+	configPath := filepath.Dir(executable) + "/" + configFile
+	return ParseConfigFromFile(configStruct, configPath)
+}
 
 func ParseConfigFromFile(configStruct interface{}, configPath string) error {
 	configStr, err := readConfigFile(configPath)
